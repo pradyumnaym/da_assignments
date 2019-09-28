@@ -145,21 +145,28 @@ model? Compare the R2 values for both models.</h4>
 print(
         paste(
                 "The R2 value of the first model is:",
-                
+                summary(model)$r.squared
+        )
+)
+print(
+        paste(
+                "The R2 value of the second model is:",
+                summary(model2)$r.squared
         )
 )
 ```
+<h4>
 <h4>b) Compute the mean absolute squared error for the two models you fit in the previous
 question (Make sure you account for all the transformations you carried out). Which
 model gives you a better MAE?</h4>
 <h4>Ans. </h4>
 ```{r}
-#hist(shen_train$CommercialArea)
+
 ```
 
 <h2>Question-4</h2>
 <h4>a)When would you typically use Regularisation? </h4>
-<h4>Ans. </h4>
+<h4>Ans. We typically use regularization when our model has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is Low , but the variance is high. In oder to fix this, we introduce some bias to decrease the variance of the model. THis way, the model performs better on the test set as well. </h4>
 
 <h4>b) Build a model using the training set to predict the attribute SalePrice using Ridge Regression. Use the test set to evaluate the model by computing R2 and RMSE</h4>
 ```{r}
