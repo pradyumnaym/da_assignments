@@ -19,7 +19,7 @@ library(caret)
 
 ```{r}
 # path to the Dataset
-path='~/Desktop/Data_analytics/Assignment_3/'
+path='D:/DA/A3/'
 ```
 
 <h4> Question 1</h4>
@@ -92,10 +92,14 @@ the target “SalePrice”. Why is this variable categorical?</h4>
 from the previous question</h4>
 ```{r}
 model <- lm(SalePrice ~ . -X -Id, ames_train)
-summary(model)
+#summary(model)
 p <- predict(model,ames_test)
-RMSE(p , ames_test$SalePrice)
-R2(p , ames_test$SalePrice)
+print(
+        paste(
+                "The RMS error of the first model on the test set is:",
+                RMSE(p , ames_test$SalePrice)
+        )
+)
 plot(model)
 ```
 <h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
@@ -120,10 +124,14 @@ hist(ames_test$SalePrice)
 
 ```{r}
 model2 <- lm(SalePrice ~ . -X -Id, ames_train)
-summary(model2)
+#summary(model2)
 p <- predict(model2,ames_test)
-RMSE(p , ames_test$SalePrice)
-R2(p , ames_test$SalePrice)
+print(
+        paste(
+                "The RMS error of the first model on the test set is:",
+                RMSE(p , ames_test$SalePrice)
+        )
+)
 plot(model2)
 ```
 
@@ -132,9 +140,14 @@ plot(model2)
 <h2>Question-3</h2>
 <h4>a)What does the measure R2 indicate? Is it a reliable measure of the goodness of fit of a
 model? Compare the R2 values for both models.</h4>
-<h4>Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. </h4>
+<h4>Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. A better metric would be adjusted R2 value, which also takes into account the number of attributes. </h4>
 ```{r}
-
+print(
+        paste(
+                "The R2 value of the first model is:",
+                
+        )
+)
 ```
 <h4>b) Compute the mean absolute squared error for the two models you fit in the previous
 question (Make sure you account for all the transformations you carried out). Which
