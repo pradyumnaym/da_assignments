@@ -224,4 +224,10 @@ print(paste("R2: ",R2(p , y_test),sep=""))
 ```
 
 <h4>d)How do Ridge and Lasso Regression differ from each other?</h4>
-</h4>Ans. </h4>
+<br></h4>Ans. The OLS algorithm for linear regression has no bias but can suffer from a large variance. Both ridge and lasso regression introduce some bias to reduce this variance. Both of these are regularised linear regression models. However, there are a few key differences between them.
+<ul>
+<li> Lasso regression uses L1 norm whereas ridge regression uses L2 norm.
+<li> Lasso regression can set the value of coefficients to zero while Ridge regression sets it to a small value. Hence, Lasso regression acts as a feature selector.
+<li> Ridge regression is more stable to rotation while Lasso regression is not.
+</ul>
+</h4>
