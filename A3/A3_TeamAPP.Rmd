@@ -105,7 +105,7 @@ plot(model)
 <h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
 look like? Which prerequisite for the application of linear regression does the plot
 violate?</h4>
-<h4>Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs </h4>
+Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs
 
 ```{r}
 hist(ames_train$SalePrice)
@@ -113,7 +113,7 @@ hist(ames_train$SalePrice)
 <h4>c)Use the histogram of the target variable to decide what kind of transformation you can
 apply to correct the problem you identified. Compare the plots of the original and
 corrected model</h4>
-<h4>Ans: As we see, the histogram of the target variable is positively skewed. In order to fix this, we can use the log transform ation, which will make it approximately normal. After looking at the histogram plot after the transform, we can tell that it has been made normal.</h4>
+Ans: As we see, the histogram of the target variable is positively skewed. In order to fix this, we can use the log transform ation, which will make it approximately normal. After looking at the histogram plot after the transform, we can tell that it has been made normal.
 
 ```{r}
 ames_test[,"SalePrice"] <- log(ames_test[,"SalePrice"])
@@ -140,7 +140,7 @@ plot(model2)
 <h2>Question-3</h2>
 <h4>a)What does the measure R2 indicate? Is it a reliable measure of the goodness of fit of a
 model? Compare the R2 values for both models.</h4>
-<h4>Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. A better metric would be adjusted R2 value, which also takes into account the number of attributes. </h4>
+Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. A better metric would be adjusted R2 value, which also takes into account the number of attributes.
 ```{r}
 print(
         paste(
@@ -159,14 +159,14 @@ print(
 <h4>b) Compute the mean absolute squared error for the two models you fit in the previous
 question (Make sure you account for all the transformations you carried out). Which
 model gives you a better MAE?</h4>
-<h4>Ans. </h4>
+Ans.
 ```{r}
 
 ```
 
 <h2>Question-4</h2>
 <h4>a)When would you typically use Regularisation? </h4>
-<h4>Ans. We typically use regularization when our model has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is Low , but the variance is high. In oder to fix this, we introduce some bias to decrease the variance of the model. THis way, the model performs better on the test set as well. </h4>
+Ans. We typically use regularization when our model has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is Low , but the variance is high. In oder to fix this, we introduce some bias to decrease the variance of the model. THis way, the model performs better on the test set as well.
 
 <h4>b) Build a model using the training set to predict the attribute SalePrice using Ridge Regression. Use the test set to evaluate the model by computing R2 and RMSE</h4>
 ```{r}
@@ -224,10 +224,10 @@ print(paste("R2: ",R2(p , y_test),sep=""))
 ```
 
 <h4>d)How do Ridge and Lasso Regression differ from each other?</h4>
-<br></h4>Ans. The OLS algorithm for linear regression has no bias but can suffer from a large variance. Both ridge and lasso regression introduce some bias to reduce this variance. Both of these are regularised linear regression models. However, there are a few key differences between them.
+<br>Ans. The OLS algorithm for linear regression has no bias but can suffer from a large variance. Both ridge and lasso regression introduce some bias to reduce this variance. Both of these are regularised linear regression models. However, there are a few key differences between them.
 <ul>
 <li> Lasso regression uses L1 norm whereas ridge regression uses L2 norm.
 <li> Lasso regression can set the value of coefficients to zero while Ridge regression sets it to a small value. Hence, Lasso regression acts as a feature selector.
 <li> Ridge regression is more stable to rotation while Lasso regression is not.
 </ul>
-</h4>
+
