@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1567408873206.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3318892972",
+    "id" : "80B5402B",
+    "lastKnownWriteTime" : 1568227074,
+    "last_content_update" : 1568227074178,
+    "path" : "D:/dataset/A2_TeamAPP.Rmd",
+    "project_path" : "A2_TeamAPP.Rmd",
+    "properties" : {
+        "cursorPosition" : "48,71",
+        "scrollLine" : "44",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

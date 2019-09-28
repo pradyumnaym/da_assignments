@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1567408967275.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "64FE25DD",
+    "lastKnownWriteTime" : 1567082434,
+    "last_content_update" : 1567413140139,
+    "path" : "D:/drive/progs/5sem/DA/A1/A1_PES1201700986.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "118,105",
+        "scrollLine" : "103"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

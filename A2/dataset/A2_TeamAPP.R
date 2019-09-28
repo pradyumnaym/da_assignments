@@ -1,0 +1,250 @@
+#packages used in this assignment
+#install.packages("plotly")
+#install.packages("tm")
+#install.packages("wordcloud")
+#install.packages("syuzhet")
+
+#Loading Packages
+library(syuzhet)
+library(tm)
+library(wordcloud)
+library(plotly)
+
+# path to the Dataset
+path='D:/dataset'
+setwd(path)
+
+#read the dataset
+fitness_data <- read.csv("fitness_data.csv")
+
+#remove nan or invalid data points
+fitness_data <- na.omit(fitness_data)
+
+#create a plotly plot
+# add_trace is used to add all the plots to the main plot.
+# a transform is used to select the required subject
+# update dropdown menus in the layout are used to switch between plots.
+# a rangeslider has been used to select a required interval of timestamps.
+p <- plot_ly(fitness_data, x = ~timestamp..in.seconds.,
+             transforms = list(
+               list( 
+               type = 'filter',
+               target = ~subID,
+               operation = '=',
+               value = unique(fitness_data$subID)[1]))) %>% 
+add_trace(y = ~heartrate.during.activity..bpm., mode = "lines") %>% 
+add_trace(y = ~Body.Temperature..Celsius., visible = F,mode = "lines")%>%
+add_trace(y = fitness_data$normal.HR..bpm., visible = F , mode = "lines")%>%
+add_trace(y = fitness_data$Acceleration..x.axis..in.m.s2, visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Gyroscope..x.axis..in.rad.s,visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Magnetometer..x.axis..in.Î.T,visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Acceleration..y.axis..in.m.s2, visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Gyroscope..y.axis..in.rad.s,visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Magnetometer..y.axis..in.Î.T,visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Acceleration..z.axis..in.m.s2, visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Gyroscope..z.axis..in.rad.s,visible = F, mode = "lines")%>%
+add_trace(y = fitness_data$Magnetometer..z.axis..in.Î.T,visible = F, mode = "lines")%>%
+rangeslider(start = 1500,end = 1900)%>%
+layout(title = 'Fitness_data',
+         xaxis = list(title = "Timestamp"),
+         yaxis = list(title = "Heart Rate"),
+         showlegend = FALSE,
+         updatemenus = list(
+           list(
+             y = 1.1,
+        buttons = list(
+          list(method = "update",
+               args = list(list(visible= list(T,F,F,F,F,F,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Heart Rate"))),
+               label = "Heart Rate"),
+
+          list(method = "update",
+               args = list(list(visible=  list(F,T,F,F,F,F,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Body Temp."))),
+               label = "Body Temp."),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,T,F,F,F,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Normal HR"))),
+               label = "Normal HR"),
+          
+          list(method = "update",
+               args = list(list(visible= list(F,F,F,T,F,F,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Acceleration X"))),
+               label = "Acceleration. X"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,T,F,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Gyroscope X"))),
+               label = "Gyroscope. X"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,F,T,F,F,F,F,F,F)),
+                           list(yaxis = list(title = "Magetometer X"))),
+               label = "Magetometer. X"),
+          list(method = "update",
+               args = list(list(visible= list(F,F,F,F,F,F,T,F,F,F,F,F)),
+                           list(yaxis = list(title = "Acceleration Y"))),
+               label = "Acceleration. Y"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,F,F,F,T,F,F,F,F)),
+                           list(yaxis = list(title = "Gyroscope Y"))),
+               label = "Gyroscope. Y"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,F,F,F,F,T,F,F,F)),
+                           list(yaxis = list(title = "Magetometer Y"))),
+               label = "Magetometer. Y"),
+          list(method = "update",
+               args = list(list(visible= list(F,F,F,F,F,F,F,F,F,T,F,F)),
+                           list(yaxis = list(title = "Acceleration Z"))),
+               label = "Acceleration. Z"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,F,F,F,F,F,F,T,F)),
+                           list(yaxis = list(title = "Gyroscope Z"))),
+               label = "Gyroscope. Z"),
+          
+          list(method = "update",
+               args = list(list(visible=  list(F,F,F,F,F,F,F,F,F,F,F,T)),
+                           list(yaxis = list(title = "Magetometer Z"))),
+               label = "Magetometer. Z")
+          )
+        ),
+        list(
+              y= 0.95,
+              x= -0.1,
+             type = 'dropdown',
+             active = 0,
+             buttons = apply(as.data.frame(unique(fitness_data$subID)), 1, 
+                             function(x) list(method = 'restyle',args = list('transforms[0].value',x),label = x)))
+         ))
+
+#show the plot
+p
+
+subject_data <- read.csv("subject.csv")
+plot(subject_data$Sex,
+     main = "Barplot of number of Data Points by gender",
+     xlab= "Gender",
+     ylab="Number of Data Points")
+
+#read the dataset
+ds <- read.csv("Lok Sabha-2014 data.csv")
+
+#find out the top 5 parties by number of winners 
+top5party = names(tail(sort(table(ds$PARTY)),5))
+
+#assign each part a color
+colorParty = list("Bharatiya Janata Party" = "orange","All India Trinamool Congress" = "violet","All India Anna Dravida Munnetra Kazhagam" = "red", "Other" = "grey","Indian National Congress" = "green","Biju Janata Dal" = "mediumturquoise")
+
+#declare a vector to be used as the party color
+vec = 1:length(ds$PARTY)
+
+#convert factor to character type
+ds$PARTY = as.character(ds$PARTY)
+
+#assign each row a color
+for(i in 1:length(ds$PARTY)) {
+  if(!(ds$PARTY[i] %in% top5party)) {
+    vec[i] = colorParty$"Other"
+  }else {
+    vec[i] = colorParty[[ds$PARTY[i]]]
+  }
+}
+
+#assign a new column to vec in the dataframe
+ds$partyColors= vec
+
+#Change the party name for each minor party to other
+for(i in 1:length(ds$PARTY)) {
+  if(!(ds$PARTY[i] %in% top5party)) {
+    ds$PARTY[i] ="Other"
+  }
+}
+
+#set the layout parameters such as initial position.
+g <- list(
+  scope = 'asia',
+  projection = list(type = 'asia'),
+  showland = TRUE,
+  landcolor = toRGB("gray95"),
+  subunitcolor = toRGB("gray85"),
+  countrycolor = toRGB("gray85"),
+  countrywidth =1,
+  subunitwidth = 1,
+  lonaxis = list(range = c(68,97)),
+  lataxis = list(range = c(8,37))
+  
+)
+
+#plot the points on the map and add markers with the party color. Pass the layout parameters.
+plot_geo(ds , lat = ~latitude, lon = ~longitude)%>%
+  add_markers(
+    text = ~paste(" Constituency:",CONSTITUENCY,"<br />", "Winner:",WINNER.NAME,"<br />","Win Margin:",MARGIN,"Votes", "<br />","Party:",PARTY),
+    color = ds$PARTY, symbol = I("square"), size = I(8), hoverinfo = "text",colors = unlist(colorParty), showlegend = T
+  )%>%
+  layout( 
+    title = 'India Lok Sabha Elections Constituency Map                 Legend', geo = g
+  )
+
+#read the file line by line
+text <- readLines("tweets.txt",encoding = "UTF-8")
+
+#create a corpus of all the lines
+corpus <- Corpus(VectorSource(text))
+
+#define a filter function to remove unwanted characters/patterns.
+
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+#remove spaces
+corpus<-tm_map(corpus,stripWhitespace)
+
+#convert all words to lowercase
+corpus<-tm_map(corpus,tolower)
+
+#remove all numbers and punctuations, and stopwords
+corpus<-tm_map(corpus,removeNumbers)
+corpus<-tm_map(corpus,removePunctuation)
+corpus<-tm_map(corpus,removeWords, stopwords("english"))
+
+#remove unwanted characters
+corpus<-tm_map(corpus,toSpace,"ã")
+corpus<-tm_map(corpus,toSpace,"â")
+
+#remove unwanted words
+corpus <- tm_map(corpus , removeWords , c("and", "the", "our", "that", "for","are","also","more","has","have","should","this","with","ã\u0082â"," ã¢â\u0080â¦","kabirsingh","shahidkapoor","kabir","singh"," ã¢â\u0080â¦","advanikiara","will","kabirsinghreview","arjunreddy","arjun","now","reddy","kabirsinghmovie","can","one","day","sir","box","kapoor","imvangasandeep","kiaraadvani","movie","shahid","kabirsinghmoviereview","itsbhushankumar","things","everyone","said","advani","muradkhetani","screen","S","t","s","just","film","hai","kiara","kabirsinghboxoffice","watching","office","watched","tseries"))
+
+
+#tdm <-TermDocumentMatrix (corpus) #Creates a TDM
+
+#TDM1<-as.matrix(tdm) #Convert this into a matrix format
+
+#v = sort(rowSums(TDM1), decreasing = TRUE) #Gives you the frequencies for every word
+#head(v,150)
+
+#draw a wordcloud
+wordcloud(corpus,scale=c(2.5,0.5), max.words=150, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"))
+
+#PLEASE NOTE THAT THIS WILL TAKE AROUND 3-4 MINS to process.
+#Get the general sentiment of each tweet.
+sent <- get_nrc_sentiment((text))
+
+#plot the obtained sentiments
+plt_sentiments =  function(){
+    barplot(as.matrix(sent),
+            las = 2,
+            col = "blue",
+            main = "A barplot of various Sentiments",
+            cex.axis = 0.6,
+            xlab = "",
+            ylab = ""
+            )
+    title(ylab="Number of People", line=3.3)
+    title(xlab = "Sentiment",line=4.25)
+}
+
+plt_sentiments()

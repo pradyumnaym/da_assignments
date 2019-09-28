@@ -1,0 +1,8 @@
+"0",""
+"0","#draw a legend at position 1,265, which shows the satisfaction lavels corresponding to each color."
+"0","legend(1,265,"
+"0","       title = ""Marital Status"","
+"0","       legend = c(""Divorced"",""Married"",""Single""),"
+"0","       fill =  c(""#648a3a"",""pink"",""deepskyblue""),"
+"0","       cex = 0.7"
+"0","       )"

@@ -1,0 +1,55 @@
+"0",""
+"0","#packages used in this assignment"
+"0","#install.packages(""plotly"")"
+"0","#install.packages(""tm"")"
+"0","#install.packages(""wordcloud"")"
+"0","#install.packages(""syuzhet"")"
+"0","#install.packages(""maps"")"
+"0","#install.packages(""raster"")"
+"0",""
+"0","#Loading Packages"
+"0","library(raster)"
+"0","library(maps)"
+"0","library(syuzhet)"
+"0","library(tm)"
+"2","Loading required package: NLP
+"
+"0","library(wordcloud)"
+"2","Loading required package: RColorBrewer
+"
+"0","library(plotly)"
+"2","Loading required package: ggplot2
+"
+"2","
+Attaching package: ‘ggplot2’
+
+"
+"2","The following object is masked from ‘package:NLP’:
+
+    annotate
+
+"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:raster’:
+
+    select
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1567015373681.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4001424911",
+    "id" : "DDF6ACD6",
+    "lastKnownWriteTime" : 1567082372,
+    "last_content_update" : 1567082372523,
+    "path" : "D:/DA/A1/A1_PES1201700986.R",
+    "project_path" : "A1_PES1201700986.R",
+    "properties" : {
+        "cursorPosition" : "300,0",
+        "scrollLine" : "265"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

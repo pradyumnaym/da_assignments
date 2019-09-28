@@ -1,0 +1,220 @@
+---
+title: "A2_TeamAPP"
+output: html_document
+---
+
+### Assignment - 2
+### Team Name : Team APP
+
+```{r}
+
+#packages used in this assignment
+#install.packages("plotly")
+#install.packages("tm")
+#install.packages("wordcloud")
+#install.packages("syuzhet")
+#install.packages("maps")
+#install.packages("raster")
+
+#Loading Packages
+library(raster)
+library(maps)
+library(syuzhet)
+library(tm)
+library(wordcloud)
+library(plotly)
+```
+
+```{r}
+# path to the Dataset
+path='D:/dataset'
+setwd(path)
+```
+
+<h2>Question-1</h2>
+<h4> Library plotly helps make brilliant visualizations that are highly interactive and appealing. </h4>
+<h4> 1. Use this library to visualize all the parameters in fitness_data.csv(except activityID,subID and timestamp(s)) against timestamp(x-axis) for each subID. </h4>
+```{r}
+
+fitness_data <- read.csv("fitness_data.csv")
+fitness_data <- na.omit(fitness_data)
+p <- plot_ly(fitness_data, x = ~timestamp..in.seconds.,
+             transforms = list(
+               list( 
+               type = 'filter',
+               target = ~subID,
+               operation = '=',
+               value = unique(fitness_data$subID)[1]))) %>% 
+add_trace(y = ~heartrate.during.activity..bpm., type = "scatter") %>% 
+add_trace(y = ~Body.Temperature..Celsius., visible = F, type = "scatter")%>%
+  
+layout(title = 'Fitness_data',
+         xaxis = list(title = "X"),
+         yaxis = list(title = "Y"),
+         showlegend = FALSE,
+         updatemenus = list(
+           list(
+             y = 0.9,
+        buttons = list(
+          list(method = "restyle",
+               args = list("visible", list(TRUE, FALSE)),
+               label = "HR"),
+
+          list(method = "restyle",
+               args = list("visible", list(FALSE, TRUE)),
+               label = "BT")
+          )
+        ),
+        list(
+              y= 0.5,
+             type = 'dropdown',
+             active = 0,
+             buttons = apply(as.data.frame(unique(fitness_data$subID)), 1, 
+                             function(x) list(method = 'restyle',args = list('transforms[0].value',x),label = x)))
+         ))
+p
+
+```
+<h2>Question-2</h2>
+<h4>What is undersampling and oversampling? Consider the dataset  subject.csv. Is there a case ofundersampling or oversampling? If so, mention a technique to remedy the problem. Justify youranswer.</h4>
+
+```{r}
+subject_data <- read.csv("subject.csv")
+plot(subject_data$Sex)
+```
+
+
+Oversampling and Undersampling are two techniques used to adjust the class distribution of a dataset. That is, to maintain a specific ratio between the number of data points for each class in a sample data, Which will help a model to learn the classification problem better.
+
+Oversampling is used when the data collected is not sufficient. When one of the classes are not represented well. In such cases, oversampling methods can be used to duplicate the data points in order to obtain a more balanced number of data points for each class in order to help train a model.
+
+On the other hand, undersampling is used when the data collected is sufficient. When one of the classes is overrepresented, undersampling is used on data points belonging to this class in order to balance it with minority classes.
+
+An oversampling technique that can be used is SMOTE.  SMOTE stands for Synthetic Minority Oversampling Technique. The module works by generating new instances from existing minority cases. The algorithm takes samples of the feature space for each target class and its nearest neighbors, and generates new examples that combine features of the target case with features of its neighbors. This approach increases the features available to each class and makes the samples more general.
+<br><br>
+
+<h2>Question-3</h2>
+<h4> There are various techniques for sampling data. Suggest a sampling technique that you think is ideal for the data in fitness_data.csv, and justify your choice. </h4>
+
+The best approach would be to first divide the data into various strata based on the activity. within each stratum, Systematic sampling can be used, where the data will be sorted based on the timestamp, in order to reduce the sample size while still retaining the relative order of the data points, which is important for attributes such as the heart rate.<br><br>
+
+
+<h2>Question-4</h2>
+<h4> In August 2018, Election Commission of India made Lok sabha 2014(Lok Sabha-2014data.csv) data public so that analysts can use it for 2019 Lok Sabha election. Provide asuitable visualisation that accounts for the distribution of votes across the country. </h4>
+```{r}
+
+ds <- read.csv("ls.csv")
+top5party = names(tail(sort(table(ds$PARTY)),5))
+
+colorParty = list("Bharatiya Janata Party" = "orange","All India Trinamool Congress" = "violet","All India Anna Dravida Munnetra Kazhagam" = "red", "Other" = "grey","Indian National Congress" = "green","Biju Janata Dal" = "mediumturquoise")
+
+vec = 1:length(ds$PARTY)
+
+ds$PARTY = as.character(ds$PARTY)
+
+for(i in 1:length(ds$PARTY)) {
+  if(!(ds$PARTY[i] %in% top5party)) {
+    vec[i] = colorParty$"Other"
+  }else {
+    vec[i] = colorParty[[ds$PARTY[i]]]
+  }
+}
+
+for(i in 1:length(ds$PARTY)) {
+  if(!(ds$PARTY[i] %in% top5party)) {
+    ds$PARTY[i] ="Other"
+  }
+}
+
+# summary(ds)
+# 
+# #NOTE: PLEASE NOTE THAT THIS REQUIRES AN INTERNET CONNECTION AS IT NEEDS TO DOWNLOAD THE DISTRICT/STATE DATA.
+# indiaLevel1<- raster::getData("GADM", country = "India", level = 1)
+# plot(indiaLevel1, main="India District-wise Map and color of the party")
+# points(ds$longitude, ds$latitude, col = vec, cex = .5, pch =19 )
+# legend("topleft",
+#        title = "Legend",
+#        legend = c("BJP","TMC","AIADMK","BJD","INC","Other"),
+#        col =  c("#276e27","#09631e","#ff1100","#3136d4","purple","#6b6464"),
+#        cex = 0.7,
+#        pch = 19
+#        )
+library(plotly)
+g <- list(
+  scope = 'asia',
+  projection = list(type = 'asia'),
+  showland = TRUE,
+  landcolor = toRGB("gray95"),
+  subunitcolor = toRGB("gray85"),
+  countrycolor = toRGB("gray85"),
+  countrywidth =1,
+  subunitwidth = 1,
+  lonaxis = list(range = c(68,97)),
+  lataxis = list(range = c(8,37))
+  
+)
+
+plot_geo(ds , lat = ~latitude, lon = ~longitude)%>%
+  add_markers(
+    text = ~paste(" Constituency:",CONSTITUENCY,"<br />", "Winner:",WINNER.NAME,"<br />","Win Margin:",MARGIN,"Votes", "<br />","Party:",PARTY),
+    color = ds$PARTY, symbol = I("square"), size = I(8), hoverinfo = "text",colors = unlist(colorParty), showlegend = T
+  )%>%
+  layout( 
+    title = 'India Lok Sabha Elections Constituency Map                 Legend', geo = g
+  )
+
+```
+<h2>Question-5</h2>
+<h4>Many good Bollywood movies were released in 2019, one of them being Kabir Singh. The filetweets.txt. contains what people have tweeted about this movie. Provide suitable visualizationthat depicts the generals sentiment of the audience.
+</h4>
+
+```{r}
+
+text <- readLines("tweets.txt",encoding = "UTF-8")
+
+corpus <- Corpus(VectorSource(text))
+
+#corpus[[1]][1]
+
+corpus<-tm_map(corpus,stripWhitespace)
+
+corpus<-tm_map(corpus,tolower)
+
+corpus<-tm_map(corpus,removeNumbers)
+
+corpus<-tm_map(corpus,removePunctuation)
+
+corpus<-tm_map(corpus,removeWords, stopwords("english"))
+
+corpus <- tm_map(corpus , removeWords , c("and", "the", "our", "that", "for","are","also","more","has","must","have","should","this","with","ã\u0082â"," ã¢â\u0080â¦"))
+
+tdm <-TermDocumentMatrix (corpus) #Creates a TDM
+
+TDM1<-as.matrix(tdm) #Convert this into a matrix format
+
+v = sort(rowSums(TDM1), decreasing = TRUE) #Gives you the frequencies for every word
+head(v,30)
+
+#inspect(corpus)
+
+wordcloud(corpus,scale=c(5,0.5), max.words=50, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"))
+
+#PLEASE NOTE THAT THIS WILL TAKE AROUND 2-3 MINS..
+sent <- get_nrc_sentiment((text))
+#sent[1,"anger"] =100000
+
+plt_sentiments =  function(){
+    barplot(as.matrix(sent),
+            las = 2,
+            col = "blue",
+            main = "A barplot of various Sentiments",
+            cex.axis = 0.6,
+            xlab = "",
+            ylab = ""
+            )
+    title(ylab="Number of People", line=3.3)
+    title(xlab = "Sentiment",line=4.25)
+}
+
+plt_sentiments()
+```

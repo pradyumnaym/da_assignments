@@ -1,0 +1,60 @@
+"0","#packages used in this assignment
+#install.packages(""plotly"")
+#install.packages(""tm"")
+#install.packages(""wordcloud"")
+install.packages(""syuzhet"")
+"
+"2","Installing package into ‘C:/Users/Pradyumna/Documents/R/win-library/3.6’
+(as ‘lib’ is unspecified)
+"
+"2","also installing the dependencies ‘textshape’, ‘zoo’, ‘dtt’
+
+"
+"2","trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.6/textshape_1.6.0.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 521879 bytes (509 KB)
+"
+"2","downloaded 509 KB
+
+"
+"2","trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.6/zoo_1.8-6.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 1103882 bytes (1.1 MB)
+"
+"2","downloaded 1.1 MB
+
+"
+"2","trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.6/dtt_0.1-2.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 21793 bytes (21 KB)
+"
+"2","downloaded 21 KB
+
+"
+"2","trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.6/syuzhet_1.0.4.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 2930510 bytes (2.8 MB)
+"
+"2","downloaded 2.8 MB
+
+"
+"1","package â€˜textshapeâ€™ successfully unpacked and MD5 sums checked
+"
+"1","package â€˜zooâ€™ successfully unpacked and MD5 sums checked
+"
+"1","package â€˜dttâ€™ successfully unpacked and MD5 sums checked
+"
+"1","package â€˜syuzhetâ€™ successfully unpacked and MD5 sums checked
+"
+"1","
+"
+"1",""
+"1","The downloaded binary packages are in
+	C:\Users\Pradyumna\AppData\Local\Temp\Rtmpuqs7bj\downloaded_packages"
+"1",""
+"1","
+"

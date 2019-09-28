@@ -1,0 +1,7 @@
+"0","#your code begins here
+# Q1-1
+#set the current working directory to the 'path' 
+setwd(path)
+"
+"2","Error in setwd(path) : cannot change working directory
+"

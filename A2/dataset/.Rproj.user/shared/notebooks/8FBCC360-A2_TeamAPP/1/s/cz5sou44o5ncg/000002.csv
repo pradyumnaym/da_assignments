@@ -1,0 +1,2 @@
+"0","subject_data <- read.csv(""subject.csv"")"
+"0","plot(subject_data$Sex)"

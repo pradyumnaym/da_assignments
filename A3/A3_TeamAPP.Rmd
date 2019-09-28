@@ -1,0 +1,207 @@
+---
+title: "A3_TeamAPP"
+author: "Team APP"
+output: html_document
+---
+
+```{r}
+
+#install.packages('corrplot')
+#install.packages('RColorBrewer')
+#install.packages('glmnet')
+#install.packages('caret')
+
+library(RColorBrewer)
+library(corrplot)
+library(glmnet)
+library(caret)
+```
+
+```{r}
+# path to the Dataset
+path='~/Desktop/Data_analytics/Assignment_3/'
+```
+
+<h4> Question 1</h4>
+One of the assumptions of multiple linear regression is that there must be no multicollinearity
+between pairs of dependent variables 
+
+a) Why is it necessary to do away with multicollinearity? 
+Ans: 
+
+b) Select only the quantitative variables and plot a correlogram to visualise the degree of
+correlation between pairs of variables. If you were to drop variables based on this plot,
+which one(s) would you drop and why? Go ahead and drop them from the train and test
+set. (Consider a threshold of 0.8)
+
+Ans: We can remove the Columns GarageCars and TotRmsAbvGrd, as these two are strongly correlated with GarageArea and GrLivArea respectively. So, these two columns have redundant data. Out of the two correlated pair of columns, we removed the ones which were counts of rooms/cars and kept the areas as the areas have a better spread than counts.
+
+```{r ,fig.height=8,fig.width = 8}
+train = "AmesHousingPrices/train.csv"
+test = "AmesHousingPrices/test.csv"
+
+ames_train = read.csv(paste(path,train,sep=""))
+ames_test = read.csv(paste(path,test,sep=""))
+#dummy = na.omit(ames_train)
+
+ames_quantitative = Filter(is.numeric, ames_train)
+drop = c("X","Id")
+ames_quantitative = ames_quantitative[,!(names(ames_quantitative) %in% drop)]
+
+#Ref: http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
+
+#cor() reutrns a matrix of correlation values
+cor_mat = cor(ames_quantitative)
+
+#different methods of the correlation plot
+methods = c("circle", "square", "ellipse", "number", "shade", "color", "pie")
+
+#colors = colorRampPalette(c("red", "white", "blue"))(20)
+
+plt = function(){
+        corrplot(cor_mat, #matrix of correlation
+        method = methods[5], #shade
+        type = "lower", #lower triangular matrix only
+        diag=FALSE, #exclude the diagonal
+        order="hclust", #heirarchical clustering
+        col = brewer.pal(n=8, name="RdBu"), #Use RColorBrewer to get a palette of blue and red gradient
+        tl.col="black", #color of text
+        tl.srt = 45, #tilt by 45 degrees
+        addCoef.col = "black", #Add correlation coefficients in each box
+        number.cex = 0.7, 
+        tl.cex = 0.8,
+        main = 'Correlogram of AMES quantitative variables')
+}
+
+plt()
+#corrgram(ames_quantitative, order=NULL, lower.panel=panel.shade,upper.panel=panel.pie, text.panel=panel.txt,main="Quantitative variables of AMES")
+```
+<h4>Ans. </h4>
+
+<h4>c) Pearson’s correlation coefficient cannot be used on categorical variables. Provide a
+suitable visualisation for the relationship between a categorical variable and the target
+variable. Plot this graph for the variable “OverallQuality” and indicate its relationship with
+the target “SalePrice”. Why is this variable categorical?</h4>
+
+```{r}
+
+```
+
+<h2>Question-2</h2>
+<h4>a)Fit a linear regression model to your data, using all of the variables you decided to keep
+from the previous question</h4>
+```{r}
+model <- lm(SalePrice ~ . -X -Id, ames_train)
+summary(model)
+p <- predict(model,ames_test)
+RMSE(p , ames_test$SalePrice)
+R2(p , ames_test$SalePrice)
+plot(model)
+```
+<h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
+look like? Which prerequisite for the application of linear regression does the plot
+violate?</h4>
+<h4>Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs </h4>
+
+```{r}
+hist(ames_train$SalePrice)
+```
+<h4>c)Use the histogram of the target variable to decide what kind of transformation you can
+apply to correct the problem you identified. Compare the plots of the original and
+corrected model</h4>
+<h4>Ans: As we see, the histogram of the target variable is positively skewed. In order to fix this, we can use the log transform ation, which will make it approximately normal. After looking at the histogram plot after the transform, we can tell that it has been made normal.</h4>
+
+```{r}
+ames_test[,"SalePrice"] <- log(ames_test[,"SalePrice"])
+ames_train[,"SalePrice"] <- log(ames_train[,"SalePrice"])
+hist(ames_test$SalePrice)
+```
+<h4> Analyse the residuals to decide whether or not they are normally distributed</h4> 
+
+```{r}
+model2 <- lm(SalePrice ~ . -X -Id, ames_train)
+summary(model2)
+p <- predict(model2,ames_test)
+RMSE(p , ames_test$SalePrice)
+R2(p , ames_test$SalePrice)
+plot(model2)
+```
+
+
+
+<h2>Question-3</h2>
+<h4>a)What does the measure R2 indicate? Is it a reliable measure of the goodness of fit of a
+model? Compare the R2 values for both models.</h4>
+<h4>Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. </h4>
+```{r}
+
+```
+<h4>b) Compute the mean absolute squared error for the two models you fit in the previous
+question (Make sure you account for all the transformations you carried out). Which
+model gives you a better MAE?</h4>
+<h4>Ans. </h4>
+```{r}
+#hist(shen_train$CommercialArea)
+```
+
+<h2>Question-4</h2>
+<h4>a)When would you typically use Regularisation? </h4>
+<h4>Ans. </h4>
+
+<h4>b) Build a model using the training set to predict the attribute SalePrice using Ridge Regression. Use the test set to evaluate the model by computing R2 and RMSE</h4>
+```{r}
+train = "ShenzhenHousingPrices/train.csv"
+test = "ShenzhenHousingPrices/test.csv" 
+
+shen_train = read.csv(paste(path,train,sep=""))
+shen_test = read.csv(paste(path,test,sep=""))
+
+#dummy = na.omit(shen_train)
+drop = c("SalePrice")
+
+X_train = data.matrix(shen_train[,!(names(shen_train) %in% drop)])
+y_train = subset(shen_train,select = drop)
+y_train = data.matrix(log(y_train))
+
+X_test = data.matrix(shen_test[,!(names(shen_test) %in% drop)])
+y_test = subset(shen_test,select = drop)
+y_test = data.matrix(log(y_test))
+
+grid = 10^seq(10, -2, length = 100)
+
+ridge_mod = glmnet(X_train, y_train, alpha = 0, lambda = grid)
+
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 0, lambda = grid)
+plot(cv_fit)
+
+best_lambda = cv_fit$lambda.min
+print(paste("Best lambda: ",best_lambda,sep=""))
+
+p = predict(ridge_mod,s = best_lambda, newx = X_test)
+print(paste("RMSE: ",RMSE(p , y_test),sep=""))
+print(paste("R2: ",R2(p , y_test),sep=""))
+
+```
+<h4>Ans.</h4>
+
+<h4>c)Build another model using the training set to predict the attribute SalePrice using Lasso
+Regression. Use the test set to evaluate the model by computing R
+2 and RMSE</h4>
+```{r}
+lasso_mod = glmnet(X_train, y_train, alpha = 1, lambda = grid)
+
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 1, lambda = grid)
+plot(cv_fit)
+
+best_lambda = cv_fit$lambda.min
+print(best_lambda)
+
+print(paste("Best lambda: ",best_lambda,sep=""))
+
+p = predict(lasso_mod,s = best_lambda, newx = X_test)
+print(paste("RMSE: ",RMSE(p , y_test),sep=""))
+print(paste("R2: ",R2(p , y_test),sep=""))
+```
+
+<h4>d)How do Ridge and Lasso Regression differ from each other?</h4>
+</h4>Ans. </h4>

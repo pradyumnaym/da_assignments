@@ -1,0 +1,3 @@
+"0","# packages that you will be using"
+"0","#install.packages(""psych"") #removed because it causes error while knitting"
+"0","library(""psych"")"

@@ -1,0 +1,127 @@
+---
+title: "A2_TeamAPP"
+output: html_document
+---
+
+### Assignment - 2
+### Team Name : Team APP
+
+```{r}
+
+#packages used in this assignment
+#install.packages("plotly")
+#install.packages("tm")
+#install.packages("wordcloud")
+#install.packages("syuzhet")
+library("syuzhet")
+
+#Loading Packages
+
+library(tm)
+library(wordcloud)
+library(plotly)
+```
+
+```{r}
+# path to the Dataset
+path='D:/dataset'
+
+setwd(path)
+```
+
+<h2>Question-1</h2>
+<h4> Library plotly helps make brilliant visualizations that are highly interactive and appealing. </h4>
+<h4> 1. Use this library to visualize all the parameters in fitness_data.csv(except activityID,subID and timestamp(s)) against timestamp(x-axis) for each subID. </h4>
+```{r}
+
+fitness_data <- read.csv("fitness_data.csv")
+
+
+```
+<h2>Question-2</h2>
+<h4>What is undersampling and oversampling? Consider the dataset  subject.csv. Is there a case ofundersampling or oversampling? If so, mention a technique to remedy the problem. Justify youranswer.</h4>
+
+```{r}
+subject_data <- read.csv("subject.csv")
+plot(subject_data$Sex)
+```
+
+
+Oversampling and Undersampling are two techniques used to adjust the class distribution of a dataset. That is, to maintain a specific ratio between the number of data points for each class in a sample data, Which will help a model to learn the classification problem better.
+
+Oversampling is used when the data collected is not sufficient. When one of the classes are not represented well. In such cases, oversampling methods can be used to duplicate the data points in order to obtain a more balanced number of data points for each class in order to help train a model.
+
+On the other hand, undersampling is used when the data collected is sufficient. When one of the classes is overrepresented, undersampling is used on data points belonging to this class in order to balance it with minority classes.
+<br><br>
+
+<h2>Question-3</h2>
+<h4> There are various techniques for sampling data. Suggest a sampling technique that you think is ideal for the data in fitness_data.csv, and justify your choice. </h4>
+
+The best approach would be to first divide the data into various strata based on the activity. within each stratum, Systematic sampling can be used, where the data will be sorted based on the timestamp, in order to reduce the sample size while still retaining the relative order of the data points, which is important for attributes such as the heart rate.<br><br>
+
+
+<h2>Question-4</h2>
+<h4> In August 2018, Election Commission of India made Lok sabha 2014(Lok Sabha-2014data.csv) data public so that analysts can use it for 2019 Lok Sabha election. Provide asuitable visualisation that accounts for the distribution of votes across the country. </h4>
+```{r}
+
+```
+
+<h2>Question-5</h2>
+<h4>Many good Bollywood movies were released in 2019, one of them being Kabir Singh. The filetweets.txt. contains what people have tweeted about this movie. Provide suitable visualizationthat depicts the generals sentiment of the audience.
+</h4>
+
+```{r}
+
+text <- readLines("tweets.txt",encoding = "UTF-8")
+
+corpus <- Corpus(VectorSource(text))
+
+#corpus[[1]][1]
+
+corpus<-tm_map(corpus,stripWhitespace)
+
+corpus<-tm_map(corpus,tolower)
+
+corpus<-tm_map(corpus,removeNumbers)
+
+corpus<-tm_map(corpus,removePunctuation)
+
+corpus<-tm_map(corpus,removeWords, stopwords("english"))
+
+corpus <- tm_map(corpus , removeWords , c("and", "the", "our", "that", "for","are","also","more","has","must","have","should","this","with","ã\u0082â"," ã¢â\u0080â¦"))
+
+tdm <-TermDocumentMatrix (corpus) #Creates a TDM
+
+TDM1<-as.matrix(tdm) #Convert this into a matrix format
+
+v = sort(rowSums(TDM1), decreasing = TRUE) #Gives you the frequencies for every word
+head(v,30)
+
+#inspect(corpus)
+
+wordcloud(corpus,scale=c(5,0.5), max.words=50, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"))
+
+#PLEASE NOTE THAT THIS WILL TAKE AROUND 2-3 MINS..
+sent <- get_nrc_sentiment((text))
+#sent[1,"anger"] =100000
+bar <- function(){
+    barplot(as.matrix(sent),
+        las = 2,
+        main = "A barplot of various Sentiments",
+        cex.axis = 0.6,
+        xlab = "sentiment         ",
+        ylab = "Number of People"
+        )
+     text(plt, par("usr")[3], labels = colnames(sent), srt = rot_angle, adj = c(1.1,1.1), xpd= TRUE, cex=0.6) 
+}
+
+
+barplot(as.matrix(sent),
+        las = 2,
+        main = "A barplot of various Sentiments",
+        cex.axis = 0.6,
+        xlab = "sentiment         ",
+        ylab = "Number of People"
+        )
+```
+
