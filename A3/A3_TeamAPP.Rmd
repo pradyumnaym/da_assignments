@@ -87,7 +87,7 @@ suitable visualisation for the relationship between a categorical variable and t
 variable. Plot this graph for the variable “OverallQuality” and indicate its relationship with
 the target “SalePrice”. Why is this variable categorical?</h4>
 
-<h4>Ans. We can use a boxplot of the salesprice for each value of the categorical variable in order to check its correlation with the target variable. We can compare the values of the target variable for each value of the categorical variable using the Median, Q1, Q3, etc. In this case, as we can clearly see, the higher the OverallQuality, the higher the SalesPrice.</h4>
+<h4>Ans. We can use a boxplot of the salesprice for each value of the categorical variable in order to check its correlation with the target variable. We can compare the values of the target variable for each value of the categorical variable using the Median, Q1, Q3, etc. In this case, as we can clearly see, higher the OverallQuality, higher the SalesPrice.</h4>
 
 ```{r}
 qualityvalues = split(ames_train[,"SalePrice"], ames_train$OverallQual)
@@ -103,26 +103,28 @@ from the previous question</h4>
 ```{r}
 model <- lm(SalePrice ~ . -X -Id, ames_train)
 #summary(model)
-p <- predict(model,ames_test)
+p1 <- predict(model,ames_test)
 print(
         paste(
                 "The RMS error of the first model on the test set is:",
                 RMSE(p , ames_test$SalePrice)
         )
 )
-plot(model)
+plot(model, which  = c(1,2,3))
 ```
 <h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
 look like? Which prerequisite for the application of linear regression does the plot
 violate?</h4>
-Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs
+Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs fitted plot has a pattern and does not have constant variance. In order to fix this, we should use some transformation.<br><br>
+
+<h4>c)Use the histogram of the target variable to decide what kind of transformation you can
+apply to correct the problem you identified. Compare the plots of the original and
+corrected model</h4>
 
 ```{r}
 hist(ames_train$SalePrice)
 ```
-<h4>c)Use the histogram of the target variable to decide what kind of transformation you can
-apply to correct the problem you identified. Compare the plots of the original and
-corrected model</h4>
+
 Ans: As we see, the histogram of the target variable is positively skewed. In order to fix this, we can use the log transform ation, which will make it approximately normal. After looking at the histogram plot after the transform, we can tell that it has been made normal.
 
 ```{r}
@@ -130,12 +132,12 @@ ames_test[,"SalePrice"] <- log(ames_test[,"SalePrice"])
 ames_train[,"SalePrice"] <- log(ames_train[,"SalePrice"])
 hist(ames_test$SalePrice)
 ```
-<h4> Analyse the residuals to decide whether or not they are normally distributed</h4> 
-
+<h4> d) Analyse the residuals to decide whether or not they are normally distributed</h4> 
+Ans:AS we can see the Normal Q-Q plot, it is much better than the first model and is almost normal, except for the tails, it is very close to the ideal Q-Q plot.
 ```{r}
 model2 <- lm(SalePrice ~ . -X -Id, ames_train)
 #summary(model2)
-p <- predict(model2,ames_test)
+p2 <- predict(model2,ames_test)
 print(
         paste(
                 "The RMS error of the first model on the test set is:",
@@ -165,13 +167,27 @@ print(
         )
 )
 ```
-<h4>
 <h4>b) Compute the mean absolute squared error for the two models you fit in the previous
 question (Make sure you account for all the transformations you carried out). Which
 model gives you a better MAE?</h4>
 Ans.
 ```{r}
+p1 <- predict(model, ames_test)
+p2<- predict(model2, ames_test)
+p2<- exp(1) ^ p2
+print(
+        paste(
+                "The MAE of the first Model is:",
+                MAE(p1, ames_test$SalePrice)                
+        )
+)
 
+print(
+        paste(
+                "The MAE of the first Model is:",
+                MAE(p2, ames_test$SalePrice)                
+        )
+)
 ```
 
 <h2>Question-4</h2>
