@@ -19,8 +19,12 @@ library(caret)
 
 ```{r}
 # path to the Dataset
+<<<<<<< HEAD
+path='~/Desktop/Data_analytics/Assignment_3/My_files/'
+=======
 path='D:/DA/A3/'
 
+>>>>>>> 00b2e20d1675294209795315b7fc63b45635a0e0
 ```
 
 <h4> Question 1</h4>
@@ -192,7 +196,11 @@ print(
 
 <h2>Question-4</h2>
 <h4>a)When would you typically use Regularisation? </h4>
+<<<<<<< HEAD
+<h4>Ans. Regularization is a technique to prevent the model from overfitting. Thus, the model fails to generalize, and doesnt perform well on test set. For example, the OLS linear regression algorithm has no bias but has high variance. This results in a tendency to overfit the training set. Regularisation introduces some bias to decrease the variance of the model. This way, the model performs better on the test set as well. </h4>
+=======
 Ans. We typically use regularization when our model has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is Low , but the variance is high. In oder to fix this, we introduce some bias to decrease the variance of the model. THis way, the model performs better on the test set as well.
+>>>>>>> 00b2e20d1675294209795315b7fc63b45635a0e0
 
 <h4>b) Build a model using the training set to predict the attribute SalePrice using Ridge Regression. Use the test set to evaluate the model by computing R2 and RMSE</h4>
 ```{r}
