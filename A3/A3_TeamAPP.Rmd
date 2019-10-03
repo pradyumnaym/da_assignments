@@ -20,6 +20,7 @@ library(caret)
 ```{r}
 # path to the Dataset
 path='D:/DA/A3/'
+
 ```
 
 <h4> Question 1</h4>
@@ -29,10 +30,7 @@ between pairs of dependent variables
 a) Why is it necessary to do away with multicollinearity? 
 Ans: 
 
-b) Select only the quantitative variables and plot a correlogram to visualise the degree of
-correlation between pairs of variables. If you were to drop variables based on this plot,
-which one(s) would you drop and why? Go ahead and drop them from the train and test
-set. (Consider a threshold of 0.8)
+b) Select only the quantitative variables and plot a correlogram to visualise the degree of correlation between pairs of variables. If you were to drop one of “GrLivArea” and “SqFootage”, which would you drop? Justify your choice.
 
 Ans: We can remove the Columns GarageCars and TotRmsAbvGrd, as these two are strongly correlated with GarageArea and GrLivArea respectively. So, these two columns have redundant data. Out of the two correlated pair of columns, we removed the ones which were counts of rooms/cars and kept the areas as the areas have a better spread than counts.
 
@@ -44,7 +42,7 @@ ames_train = read.csv(paste(path,train,sep=""))
 ames_test = read.csv(paste(path,test,sep=""))
 #dummy = na.omit(ames_train)
 
-ames_quantitative = Filter(is.numeric, ames_train)
+ames_quantitative = ames_train[,c(3,10,19,20,22)]
 drop = c("X","Id")
 ames_quantitative = ames_quantitative[,!(names(ames_quantitative) %in% drop)]
 
@@ -69,11 +67,17 @@ plt = function(){
         tl.srt = 45, #tilt by 45 degrees
         addCoef.col = "black", #Add correlation coefficients in each box
         number.cex = 0.7, 
-        tl.cex = 0.8,
-        main = 'Correlogram of AMES quantitative variables')
+        tl.cex = 0.8        )
+        title(main = 'Correlogram of AMES quantitative variables', line = -2)
 }
 
 plt()
+print("The summary statistics for GrLivArea are:")
+summary(ames_quantitative$GrLivArea)
+print("The summary statistics for SqFootage are:")
+summary(ames_quantitative$SqFootage)
+hist(ames_quantitative$GrLivArea)
+hist(ames_quantitative$SqFootage)
 #corrgram(ames_quantitative, order=NULL, lower.panel=panel.shade,upper.panel=panel.pie, text.panel=panel.txt,main="Quantitative variables of AMES")
 ```
 <h4>Ans. </h4>
@@ -83,8 +87,14 @@ suitable visualisation for the relationship between a categorical variable and t
 variable. Plot this graph for the variable “OverallQuality” and indicate its relationship with
 the target “SalePrice”. Why is this variable categorical?</h4>
 
-```{r}
+<h4>Ans. We can use a boxplot of the salesprice for each value of the categorical variable in order to check its correlation with the target variable. We can compare the values of the target variable for each value of the categorical variable using the Median, Q1, Q3, etc. In this case, as we can clearly see, the higher the OverallQuality, the higher the SalesPrice.</h4>
 
+```{r}
+qualityvalues = split(ames_train[,"SalePrice"], ames_train$OverallQual)
+boxplot(qualityvalues,
+        main = "Boxplot of the sales price for each level of OverallQuality",
+        xlab = "OverallQual",
+        ylab = "SalesPrice")
 ```
 
 <h2>Question-2</h2>
