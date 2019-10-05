@@ -28,11 +28,11 @@ One of the assumptions of multiple linear regression is that there must be no mu
 between pairs of dependent variables 
 
 a) Why is it necessary to do away with multicollinearity? 
-Ans: 
+Ans: Multicollinearity occurs when independent variables are correlated in a multiple regression model. If two independent variables are highly correlated, then this causes problems when we try to interpret the results of the model. Since the contribution of one variable is influenced by the other variable, the estimates for regression coefficients are unreliable. This means that small changes in the model will result in highly fluctuating levels of accuracy and error. Further, the tests of significance for regression coefficients can be misleading. Also, if the variables are perfectly correlated, a unique least square solution for regression coefficients does not exist.<br>
 
 b) Select only the quantitative variables and plot a correlogram to visualise the degree of correlation between pairs of variables. If you were to drop one of “GrLivArea” and “SqFootage”, which would you drop? Justify your choice.
 
-Ans: We can remove the Columns GarageCars and TotRmsAbvGrd, as these two are strongly correlated with GarageArea and GrLivArea respectively. So, these two columns have redundant data. Out of the two correlated pair of columns, we removed the ones which were counts of rooms/cars and kept the areas as the areas have a better spread than counts.
+Ans: (ORIGNIAL ANSWER) We can remove the Columns GarageCars and TotRmsAbvGrd, as these two are strongly correlated with GarageArea and GrLivArea respectively (correlation coefficient > 0.8). So, these two columns have redundant data. Out of the two correlated pair of columns, we removed the ones which were counts of rooms/cars and kept the areas as the areas have a better spread than counts.
 
 Among GrLivArea and SqFootage, both are almost equally strongly correlated with almost all the variables. But, we see that the correlation of GrLivArea with the target variable is 0.73, while the correlation of the SqFootage variable is 0.63. Hence, we would drop the SqFootage variable.
 
@@ -89,7 +89,7 @@ suitable visualisation for the relationship between a categorical variable and t
 variable. Plot this graph for the variable “OverallQuality” and indicate its relationship with
 the target “SalePrice”. Why is this variable categorical?</h4>
 
-<h4>Ans. We can use a boxplot of the salesprice for each value of the categorical variable in order to check its correlation with the target variable. We can compare the values of the target variable for each value of the categorical variable using the Median, Q1, Q3, etc. In this case, as we can clearly see, higher the OverallQuality, higher the SalesPrice.</h4>
+<h4>Ans. We can use a boxplot of the salesprice for each value of the categorical variable in order to check its correlation with the target variable. We can compare the values of the target variable for each value of the categorical variable using the Median, Q1, Q3, etc. In this case, as we can clearly see, higher the OverallQuality, higher the SalesPrice. Usually, categorical variables do not have any intrinsic ordering of values. Although this variable has some sort of an intrinsic ordering(overall quality), it can be considered as a categorical variable as the number of values it can take is finite and small.</h4>
 
 ```{r}
 qualityvalues = split(ames_train[,"SalePrice"], ames_train$OverallQual)
@@ -104,18 +104,11 @@ boxplot(qualityvalues,
 from the previous question</h4>
 ```{r}
 
-ames_train$OverallQual = as.factor(ames_train$OverallQual)
-ames_test$OverallQual = as.factor(ames_test$OverallQual)
+#ames_train$OverallQual = as.factor(ames_train$OverallQual)
+#ames_test$OverallQual = as.factor(ames_test$OverallQual)
 
 model <- lm(SalePrice ~ . -X -Id, ames_train)
-#summary(model)
 p1 <- predict(model,ames_test)
-print(
-        paste(
-                "The RMS error of the first model on the test set is:",
-                RMSE(p1 , ames_test$SalePrice)
-        )
-)
 plot(model, which  = c(1,2,3))
 ```
 <h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
@@ -144,12 +137,6 @@ Ans:As we can see the Normal Q-Q plot, it is much better than the first model an
 model2 <- lm(SalePrice ~ . -X -Id, ames_train)
 #summary(model2)
 p2 <- predict(model2,ames_test)
-print(
-        paste(
-                "The RMS error of the first model on the test set is:",
-                RMSE(p2 , ames_test$SalePrice)
-        )
-)
 plot(model2)
 ```
 
@@ -158,7 +145,7 @@ plot(model2)
 <h2>Question-3</h2>
 <h4>a)What does the measure R2 indicate? Is it a reliable measure of the goodness of fit of a
 model? Compare the R2 values for both models.</h4>
-Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. A better metric would be adjusted R2 value, which also takes into account the number of attributes.
+Ans. The R2 value indicates the fraction of the errors in the data that are accounted for by the model.(SSR/SST). 0 indicates that the model explains none of the variablility of the data, while a value of 1 indicates that it explains 100% of the variation in thedata. No, R2 value is not a reliable metric in case of multiple regression, as it keeps increasing with increase in the number of attributes. A better metric would be adjusted R2 value, which also takes into account the number of attributes. Also, a model with a high R2 value might be bad, and a model with a low R2 value migh still be good. So, it is not advised to choose between models by just looking at the R2 value. 
 ```{r}
 print(
         paste(
@@ -198,7 +185,7 @@ print(
 
 <h2>Question-4</h2>
 <h4>a)When would you typically use Regularisation? </h4>
-Ans. We typically use regularization when our model has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is Low , but the variance is high. In oder to fix this, we introduce some bias to decrease the variance of the model. THis way, the model performs better on the test set as well.
+Ans. We typically use regularization when our model is too complex and has fit the training data too well and fails to generalize, and doesnt perform well on test set. In such cases, the bias is low , but the variance is high. In order to fix this, we introduce some bias to decrease the variance of the model. This way, the model performs better on the test set as well.
 
 <h4>b) Build a model using the training set to predict the attribute SalePrice using Ridge Regression. Use the test set to evaluate the model by computing R2 and RMSE</h4>
 ```{r}
@@ -219,7 +206,7 @@ X_test = data.matrix(shen_test[,!(names(shen_test) %in% drop)])
 y_test = subset(shen_test,select = drop)
 y_test = data.matrix(log(y_test))
 
-grid = 10^seq(10, -2, length = 100)
+grid = 10^seq(-2,7, length = 100)
 
 ridge_mod = glmnet(X_train, y_train, alpha = 0, lambda = grid)
 
@@ -246,7 +233,6 @@ cv_fit <- cv.glmnet(X_train, y_train, alpha = 1, lambda = grid)
 plot(cv_fit)
 
 best_lambda = cv_fit$lambda.min
-print(best_lambda)
 
 print(paste("Best lambda: ",best_lambda,sep=""))
 
@@ -258,8 +244,8 @@ print(paste("R2: ",R2(p , y_test),sep=""))
 <h4>d)How do Ridge and Lasso Regression differ from each other?</h4>
 <br>Ans. The OLS algorithm for linear regression has no bias but can suffer from a large variance. Both ridge and lasso regression introduce some bias to reduce this variance. Both of these are regularised linear regression models. However, there are a few key differences between them.
 <ul>
-<li> Lasso regression uses L1 norm whereas ridge regression uses L2 norm.
-<li> Lasso regression can set the value of coefficients to zero while Ridge regression sets it to a small value. Hence, Lasso regression acts as a feature selector.
-<li> Ridge regression is more stable to rotation while Lasso regression is not.
+<li> Lasso regression uses L1 norm whereas ridge regression uses L2 norm of the parameter terms.
+<li> Lasso regression can set the value of coefficients to zero while Ridge regression sets it to a small value. Hence, Lasso regression acts as a feature selector,as one of the correlated variables is given a non zero value, while others are close to zero, whereas ridge regression assigns almost equal values to all the correlated variables.
+<li> Ridge regression is more stable to rotation while Lasso regression is not, due to the L2 norm in ridge regression.
 </ul>
 
