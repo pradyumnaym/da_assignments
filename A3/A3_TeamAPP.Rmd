@@ -3,6 +3,11 @@ title: "A3_TeamAPP"
 author: "Team APP"
 output: html_document
 ---
+<h4>
+Pradyumna YM: PES1201700986
+Anush V Kini: PES1201701646
+Punit Pranesh Koujalgi: PES1201701502
+</h4>
 
 ```{r}
 
@@ -78,8 +83,6 @@ print("The summary statistics for GrLivArea are:")
 summary(ames_quantitative$GrLivArea)
 print("The summary statistics for SqFootage are:")
 summary(ames_quantitative$SqFootage)
-hist(ames_quantitative$GrLivArea)
-hist(ames_quantitative$SqFootage)
 #corrgram(ames_quantitative, order=NULL, lower.panel=panel.shade,upper.panel=panel.pie, text.panel=panel.txt,main="Quantitative variables of AMES")
 ```
 <h4>Ans. </h4>
@@ -108,13 +111,17 @@ from the previous question</h4>
 #ames_test$OverallQual = as.factor(ames_test$OverallQual)
 
 model <- lm(SalePrice ~ . -X -Id, ames_train)
-p1 <- predict(model,ames_test)
-plot(model, which  = c(1,2))
+print("The summary of the first model is:")
+#summary(model)
 ```
 <h4>b)Plot the standardised residuals versus fitted values. What does an ideal plot of this kind
 look like? Which prerequisite for the application of linear regression does the plot
 violate?</h4>
 Ans. An Ideal plot of the standardised residuals and the fitted values should be random, and must have a constant variance. But, as we see here, the Standardized residual vs fitted plot has a pattern and does not have constant variance. In order to fix this, we should use some transformation.<br><br>
+```{r warning = F}
+plot(model, which  = c(1,2))
+```
+
 
 <h4>c)Use the histogram of the target variable to decide what kind of transformation you can
 apply to correct the problem you identified. Compare the plots of the original and
@@ -135,8 +142,8 @@ hist(ames_train$SalePrice)
 Ans:As we can see the Normal Q-Q plot, it is much better than the first model and is almost normal, except for the tails, it is very close to the ideal Q-Q plot. Also, the residual vs fitted plot is also random and doesn't exhibit any patterns. Also, the residuals are equally spread on both sides of the 0 line. So, we can tell that the model has normal distribution of residuals. 
 ```{r warning =F}
 model2 <- lm(SalePrice ~ . -X -Id, ames_train)
+print("The summary of the second model is:")
 #summary(model2)
-p2 <- predict(model2,ames_test)
 plot(model2, which  = c(1,2))
 ```
 
